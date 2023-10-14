@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cstddef>
+
+namespace ink {
+
 template <class T>
 class KThreadPool {
  public:
@@ -10,3 +14,5 @@ class KThreadPool {
  private:
   std::size_t capacity_;
 };
+
+}  // namespace ink

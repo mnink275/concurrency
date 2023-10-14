@@ -31,3 +31,8 @@ dist-clean:
 .PHONY: format
 format:
 	@find src -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
+
+# Run after build-debug
+.PHONY: tests
+tests: build-debug
+	@cd build_debug && ctest -V
