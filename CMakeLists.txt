@@ -9,12 +9,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(core)
+add_subdirectory(third_party/function2)
 
 add_executable(
     ${PROJECT_NAME} main.cpp
 )
 target_link_libraries(
-    ${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs
+    ${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs function2
 )
 
 target_compile_options(
