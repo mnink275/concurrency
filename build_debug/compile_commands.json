@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/ink275/repositories/thread-pool/build_debug",
+  "command": "/usr/bin/c++   -g -fsanitize=address -Wall -Wextra -Wpedantic -o CMakeFiles/KThreadPool.dir/main.cpp.o -c /home/ink275/repositories/thread-pool/main.cpp",
+  "file": "/home/ink275/repositories/thread-pool/main.cpp"
+}
+]

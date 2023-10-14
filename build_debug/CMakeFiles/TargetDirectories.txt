@@ -1,0 +1,6 @@
+/home/ink275/repositories/thread-pool/build_debug/CMakeFiles/KThreadPool.dir
+/home/ink275/repositories/thread-pool/build_debug/CMakeFiles/edit_cache.dir
+/home/ink275/repositories/thread-pool/build_debug/CMakeFiles/rebuild_cache.dir
+/home/ink275/repositories/thread-pool/build_debug/core/CMakeFiles/KThreadPool_objs.dir
+/home/ink275/repositories/thread-pool/build_debug/core/CMakeFiles/edit_cache.dir
+/home/ink275/repositories/thread-pool/build_debug/core/CMakeFiles/rebuild_cache.dir
