@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <thread>
+#include <optional>
 
 namespace ink {
 
@@ -11,9 +12,7 @@ KThreadPool::KThreadPool(std::size_t workers_amount)
 }
 
 KThreadPool::~KThreadPool() {
-  for ([[maybe_unused]] auto&& worker : workers_) {
-    Submit(Task{});
-  }
+  queue_.Close();
   for (auto&& worker : workers_) {
     worker.join();
   }
@@ -26,8 +25,10 @@ std::size_t KThreadPool::GetWorkersAmount() { return workers_amount_; }
 void KThreadPool::InitWorkers() {
   for (std::size_t i = 0; i < workers_amount_; ++i) {
     workers_.emplace_back([this]() {
-      auto task = queue_.Fetch();
-      if (!task) return;
+      auto task_wrapper = queue_.Fetch();
+      if (!task_wrapper.has_value()) return;
+
+      auto task = std::move(task_wrapper.value());
       task();
     });
   }

@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <iostream>
 #include <thread>
+#include <chrono>
 
 #include <core/include/thread_pool.hpp>
 

@@ -2,34 +2,47 @@
 
 #include <condition_variable>
 #include <mutex>
+#include <optional>
 #include <queue>
 
 namespace ink {
 
-template <class Task>
+template <class T>
 class MPMCUnboundedQueue {
  public:
-  void Put(Task task) {
+  void Put(T task) {
     std::lock_guard guard(mutex_);
 
-    queue_.push(std::move(task));
+    if (is_closed_) return;
+
+    underlying_queue_.push(std::move(task));
     task_available_.notify_one();
   }
 
-  Task Fetch() {
+  std::optional<T> Fetch() {
     std::unique_lock lock(mutex_);
 
-    task_available_.wait(lock, [this]() { return !queue_.empty(); });
-    auto task = std::move(queue_.front());
-    queue_.pop();
+    task_available_.wait(
+        lock, [this]() { return !underlying_queue_.empty() || is_closed_; });
+    if (underlying_queue_.empty()) return std::nullopt;
+
+    auto task = std::move(underlying_queue_.front());
+    underlying_queue_.pop();
 
     return task;
   }
 
+  void Close() {
+    std::lock_guard guard(mutex_);
+    is_closed_ = true;
+    task_available_.notify_all();
+  }
+
  private:
-  std::queue<Task> queue_;
+  std::queue<T> underlying_queue_;
   std::condition_variable task_available_;
   std::mutex mutex_;
+  bool is_closed_{false};
 };
 
 }  // namespace ink
