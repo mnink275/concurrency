@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 
-#include "core/thread-pool.hpp"
+#include <core/include/thread_pool.hpp>
 
 namespace ink::test {
 

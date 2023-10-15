@@ -11,11 +11,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_subdirectory(core)
 add_subdirectory(third_party/function2)
 
+set(THIRD_PARTY_LIBS "function2")
+
 add_executable(
     ${PROJECT_NAME} main.cpp
 )
 target_link_libraries(
-    ${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs function2
+    ${PROJECT_NAME} ${PROJECT_NAME}_objs
 )
 
 target_compile_options(

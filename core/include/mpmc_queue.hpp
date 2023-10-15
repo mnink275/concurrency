@@ -20,7 +20,7 @@ class MPMCUnboundedQueue {
     std::unique_lock lock(mutex_);
 
     task_available_.wait(lock, [this]() { return !queue_.empty(); });
-    auto task = queue_.front();
+    auto task = std::move(queue_.front());
     queue_.pop();
 
     return task;

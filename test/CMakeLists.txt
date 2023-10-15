@@ -5,7 +5,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(
-    ${PROJECT_NAME}_test unit_test.cpp
+    ${PROJECT_NAME}_test thread_pool_test.cpp mpmc_queue_test.cpp
 )
 
 target_include_directories(
@@ -13,7 +13,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-    ${PROJECT_NAME}_test GTest::gtest_main
+    ${PROJECT_NAME}_test GTest::gtest_main ${PROJECT_NAME}_objs
 )
 
 include(GoogleTest)
