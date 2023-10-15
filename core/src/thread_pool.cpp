@@ -1,8 +1,8 @@
 #include "thread_pool.hpp"
 
 #include <cstddef>
-#include <thread>
 #include <optional>
+#include <thread>
 
 namespace ink {
 
@@ -25,11 +25,13 @@ std::size_t KThreadPool::GetWorkersAmount() { return workers_amount_; }
 void KThreadPool::InitWorkers() {
   for (std::size_t i = 0; i < workers_amount_; ++i) {
     workers_.emplace_back([this]() {
-      auto task_wrapper = queue_.Fetch();
-      if (!task_wrapper.has_value()) return;
+      for(;;) {
+        auto task_wrapper = queue_.Fetch();
+        if (!task_wrapper.has_value()) return;
 
-      auto task = std::move(task_wrapper.value());
-      task();
+        auto task = std::move(task_wrapper.value());
+        task();
+      }
     });
   }
 }

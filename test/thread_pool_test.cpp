@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
+#include <atomic>
+#include <chrono>
 #include <cstddef>
 #include <iostream>
 #include <thread>
-#include <chrono>
 
 #include <core/include/thread_pool.hpp>
 
@@ -44,6 +45,22 @@ TEST(KThreadPool, Parallel) {
   const std::chrono::duration<double, std::milli> elapsed = end - start;
 
   EXPECT_TRUE(elapsed < 1s + 500ms) << "Current value is: " << elapsed.count();
+}
+
+TEST(KThreadPool, Atomic) {
+  KThreadPool tp{6};
+
+  std::atomic<int> count{0};
+  const int expected = 120;
+  for (int i = 0; i < expected; i++) {
+    tp.Submit([&count]() { 
+      std::this_thread::sleep_for(30ms);
+      count.fetch_add(1);
+    });
+  }
+
+  std::this_thread::sleep_for(1s);
+  EXPECT_EQ(expected, count.load());
 }
 
 }  // namespace ink::test

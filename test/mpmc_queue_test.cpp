@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <chrono>
 #include <cstddef>
 #include <iostream>
 #include <thread>
-#include <chrono>
 
 #include <core/include/mpmc_queue.hpp>
 
@@ -41,9 +41,7 @@ TEST(MPMCQueue, NoDeadlockClose) {
 
   const auto start = std::chrono::high_resolution_clock::now();
 
-  std::thread consumer{[&queue](){
-    queue.Fetch();
-  }};
+  std::thread consumer{[&queue]() { queue.Fetch(); }};
 
   std::this_thread::sleep_for(100ms);
   queue.Close();
@@ -57,8 +55,8 @@ TEST(MPMCQueue, NoDeadlockClose) {
 TEST(MPMCQueue, AfterClose) {
   MPMCUnboundedQueue<std::size_t> queue;
   queue.Put(5);
-  
-  std::thread consumer{[&queue](){
+
+  std::thread consumer{[&queue]() {
     std::this_thread::sleep_for(100ms);
     queue.Put(10);
   }};
