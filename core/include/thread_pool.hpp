@@ -6,7 +6,7 @@
 
 #include "mpmc_queue.hpp"
 #include "task.hpp"
-
+#include "wait_group.hpp"
 namespace ink {
 
 class KThreadPool {
@@ -16,6 +16,7 @@ class KThreadPool {
 
   void Submit(Task task);
   std::size_t GetWorkersAmount();
+  void WaitIdle();
 
  private:
   void InitWorkers();
@@ -24,6 +25,7 @@ class KThreadPool {
   std::size_t workers_amount_;
   std::vector<std::thread> workers_;
   MPMCUnboundedQueue<Task> queue_;
+  WaitGroup tasks_;
 };
 
 }  // namespace ink

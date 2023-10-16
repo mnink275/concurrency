@@ -18,19 +18,26 @@ KThreadPool::~KThreadPool() {
   }
 }
 
-void KThreadPool::Submit(Task task) { queue_.Put(std::move(task)); }
+void KThreadPool::Submit(Task task) {
+  tasks_.Add(1);
+  queue_.Put(std::move(task));
+}
 
 std::size_t KThreadPool::GetWorkersAmount() { return workers_amount_; }
+
+void KThreadPool::WaitIdle() { tasks_.Wait(); }
 
 void KThreadPool::InitWorkers() {
   for (std::size_t i = 0; i < workers_amount_; ++i) {
     workers_.emplace_back([this]() {
-      for(;;) {
+      for (;;) {
         auto task_wrapper = queue_.Fetch();
         if (!task_wrapper.has_value()) return;
 
         auto task = std::move(task_wrapper.value());
         task();
+
+        tasks_.Done();
       }
     });
   }

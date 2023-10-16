@@ -3,6 +3,7 @@ CLANG_FORMAT ?= clang-format
 
 # Debug cmake configuration
 build_debug/Makefile:
+	@git submodule update --init
 	@mkdir -p build_debug
 	@cd build_debug && \
       cmake -DCMAKE_BUILD_TYPE=Debug ..

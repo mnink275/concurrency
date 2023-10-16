@@ -47,19 +47,16 @@ TEST(KThreadPool, Parallel) {
   EXPECT_TRUE(elapsed < 1s + 500ms) << "Current value is: " << elapsed.count();
 }
 
-TEST(KThreadPool, Atomic) {
+TEST(KThreadPool, WaitIdle) {
   KThreadPool tp{6};
 
   std::atomic<int> count{0};
-  const int expected = 120;
+  const int expected = 1'000;
   for (int i = 0; i < expected; i++) {
-    tp.Submit([&count]() { 
-      std::this_thread::sleep_for(30ms);
-      count.fetch_add(1);
-    });
+    tp.Submit([&count]() { count.fetch_add(1); });
   }
 
-  std::this_thread::sleep_for(1s);
+  tp.WaitIdle();
   EXPECT_EQ(expected, count.load());
 }
 
