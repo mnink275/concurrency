@@ -27,6 +27,16 @@ TEST(WaitGroup, SimpleWork) {
   EXPECT_TRUE(is_reached_);
 }
 
+TEST(WaitGroup, OnlyWaitNoDeadlock) {
+  WaitGroup wg;
+
+  utils::Timer timer{};
+
+  wg.Wait();
+
+  EXPECT_TRUE(timer.GetElapsed() < 10ms);
+}
+
 TEST(WaitGroup, Waiting) {
   WaitGroup wg;
 
