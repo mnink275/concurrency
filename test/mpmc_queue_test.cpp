@@ -6,6 +6,7 @@
 #include <thread>
 
 #include <core/include/mpmc_queue.hpp>
+#include <utils/timer.hpp>
 
 namespace ink::test {
 
@@ -39,7 +40,7 @@ TEST(MPMCQueue, FIFO) {
 TEST(MPMCQueue, NoDeadlockClose) {
   MPMCUnboundedBlockingQueue<std::size_t> queue;
 
-  const auto start = std::chrono::high_resolution_clock::now();
+  utils::Timer timer{};
 
   std::thread consumer{[&queue]() { queue.Fetch(); }};
 
@@ -47,9 +48,7 @@ TEST(MPMCQueue, NoDeadlockClose) {
   queue.Close();
   consumer.join();
 
-  const auto end = std::chrono::high_resolution_clock::now();
-  const std::chrono::duration<double, std::milli> elapsed = end - start;
-  EXPECT_TRUE(elapsed < 200ms);
+  EXPECT_TRUE(timer.GetElapsed() < 200ms);
 }
 
 TEST(MPMCQueue, AfterClose) {

@@ -7,6 +7,7 @@
 #include <thread>
 
 #include <core/include/thread_pool.hpp>
+#include <utils/timer.hpp>
 
 namespace ink::test {
 
@@ -32,7 +33,7 @@ TEST(KThreadPool, Parallel) {
   const std::size_t tasks_amount = 6;
   KThreadPool tp{tasks_amount};
 
-  const auto start = std::chrono::high_resolution_clock::now();
+  utils::Timer timer{};
 
   for (int i = 0; i < tasks_amount; i++) {
     tp.Submit([]() {
@@ -41,10 +42,7 @@ TEST(KThreadPool, Parallel) {
     });
   }
 
-  const auto end = std::chrono::high_resolution_clock::now();
-  const std::chrono::duration<double, std::milli> elapsed = end - start;
-
-  EXPECT_TRUE(elapsed < 1s + 500ms) << "Current value is: " << elapsed.count();
+  EXPECT_TRUE(timer.GetElapsed() < 1s + 500ms);
 }
 
 TEST(KThreadPool, WaitIdle) {
