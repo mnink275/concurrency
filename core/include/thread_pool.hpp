@@ -24,7 +24,7 @@ class KThreadPool final {
  private:
   std::size_t workers_amount_;
   std::vector<std::thread> workers_;
-  MPMCUnboundedQueue<Task> queue_;
+  MPMCUnboundedBlockingQueue<Task> queue_;
   WaitGroup tasks_;
 };
 

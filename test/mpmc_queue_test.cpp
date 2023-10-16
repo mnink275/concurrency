@@ -21,13 +21,13 @@ struct MoveOnly {
 
 TEST(MPMCQueue, MoveOnly) {
   MoveOnly move_only{};
-  MPMCUnboundedQueue<MoveOnly> queue;
+  MPMCUnboundedBlockingQueue<MoveOnly> queue;
   queue.Put(std::move(move_only));
   auto result = queue.Fetch();
 }
 
 TEST(MPMCQueue, FIFO) {
-  MPMCUnboundedQueue<std::size_t> queue;
+  MPMCUnboundedBlockingQueue<std::size_t> queue;
   for (std::size_t i = 0; i < 1'000'000; ++i) {
     queue.Put(i);
   }
@@ -37,7 +37,7 @@ TEST(MPMCQueue, FIFO) {
 }
 
 TEST(MPMCQueue, NoDeadlockClose) {
-  MPMCUnboundedQueue<std::size_t> queue;
+  MPMCUnboundedBlockingQueue<std::size_t> queue;
 
   const auto start = std::chrono::high_resolution_clock::now();
 
@@ -53,7 +53,7 @@ TEST(MPMCQueue, NoDeadlockClose) {
 }
 
 TEST(MPMCQueue, AfterClose) {
-  MPMCUnboundedQueue<std::size_t> queue;
+  MPMCUnboundedBlockingQueue<std::size_t> queue;
   queue.Put(5);
 
   std::thread consumer{[&queue]() {
