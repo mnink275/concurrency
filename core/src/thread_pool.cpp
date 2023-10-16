@@ -23,7 +23,7 @@ void KThreadPool::Submit(Task task) {
   queue_.Put(std::move(task));
 }
 
-std::size_t KThreadPool::GetWorkersAmount() { return workers_amount_; }
+std::size_t KThreadPool::GetWorkersAmount() const { return workers_amount_; }
 
 void KThreadPool::WaitIdle() { tasks_.Wait(); }
 

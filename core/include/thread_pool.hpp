@@ -15,7 +15,7 @@ class KThreadPool {
   ~KThreadPool();
 
   void Submit(Task task);
-  std::size_t GetWorkersAmount();
+  std::size_t GetWorkersAmount() const;
   void WaitIdle();
 
  private:

@@ -34,7 +34,7 @@ class MPMCUnboundedQueue {
 
   void Close() {
     std::lock_guard guard(mutex_);
-    
+
     is_closed_ = true;
     task_available_.notify_all();
   }
