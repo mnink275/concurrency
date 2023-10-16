@@ -1,5 +1,3 @@
-#add_subdirectory(include)
-#add_subdirectory(src)
 file(
     GLOB SOURCES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 )

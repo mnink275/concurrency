@@ -6,7 +6,7 @@
 
 namespace ink {
 
-class WaitGroup {
+class WaitGroup final {
  public:
   void Add(std::size_t count);
   void Done();

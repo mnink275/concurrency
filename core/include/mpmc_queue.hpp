@@ -8,7 +8,7 @@
 namespace ink {
 
 template <class T>
-class MPMCUnboundedQueue {
+class MPMCUnboundedQueue final {
  public:
   void Put(T task) {
     std::lock_guard guard(mutex_);

@@ -9,7 +9,7 @@
 #include "wait_group.hpp"
 namespace ink {
 
-class KThreadPool {
+class KThreadPool final {
  public:
   KThreadPool(std::size_t workers_amount);
   ~KThreadPool();
