@@ -11,6 +11,7 @@ add_executable(
     thread_pool_test.cpp
     mpmc_queue_test.cpp
     wait_group_test.cpp
+    futures_test.cpp
 )
 
 target_include_directories(

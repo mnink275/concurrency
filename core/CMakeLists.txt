@@ -1,8 +1,8 @@
 file(
-    GLOB SOURCES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
+    GLOB_RECURSE SOURCES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 )
 file(
-    GLOB HEADERS ${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
+    GLOB_RECURSE HEADERS ${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
 add_library(
