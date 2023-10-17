@@ -23,6 +23,11 @@ build-debug build-release: build-%: cmake-%
 run: build-debug
 	./build_debug/KThreadPool
 
+# Run after cleanup and build
+.PHONY: clean-run
+clean-run: dist-clean
+	@make run
+
 # Cleanup data
 .PHONY: dist-clean
 dist-clean:
