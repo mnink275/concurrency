@@ -21,7 +21,7 @@ build-debug build-release: build-%: cmake-%
 # Run after build-debug
 .PHONY: run
 run: build-debug
-	./build_debug/KThreadPool
+	@./build_debug/KThreadPool
 
 # Run after cleanup and build
 .PHONY: clean-run
@@ -39,7 +39,24 @@ format:
 	@find core -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
 	@find test -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
 
-# Run after build-debug
-.PHONY: tests
-tests: build-debug
+
+# Test with ASAN/TSAN
+tests-ASAN tests-TSAN: tests-%:
+	@make dist-clean
+	@git submodule update --init
+	@mkdir -p build_debug
+	@cd build_debug && \
+      cmake -DCMAKE_BUILD_TYPE=Debug -D$*_ENABLED=ON ..
+	@cmake --build build_debug -j $(NPROCS)
 	@cd build_debug && ctest -V
+
+
+.PHONY: tests
+tests:
+	@make tests-ASAN
+	@make tests-TSAN
+
+# Run tests after cleanup
+.PHONY: clean-tests
+clean-tests: dist-clean
+	@make tests

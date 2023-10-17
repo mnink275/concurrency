@@ -1,0 +1,11 @@
+if (ASAN_ENABLED)
+    add_compile_options(-fsanitize=address,undefined)
+    set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address,undefined)
+    message(STATUS "Address and Undefined sanitizers enabled")
+endif()
+
+if (TSAN_ENABLED)
+    add_compile_options(-fsanitize=thread)
+    set(CMAKE_EXE_LINKER_FLAGS -fsanitize=thread)
+    message(STATUS "Thread sanitizer enabled")
+endif()
