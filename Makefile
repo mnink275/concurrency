@@ -41,6 +41,7 @@ format:
 
 
 # Test with ASAN/TSAN
+.PHONY: tests-ASAN tests-TSAN
 tests-ASAN tests-TSAN: tests-%:
 	@make dist-clean
 	@git submodule update --init
