@@ -9,10 +9,17 @@
 #include "wait_group.hpp"
 namespace ink {
 
-class KThreadPool final {
+class ThreadPool final {
  public:
-  KThreadPool(std::size_t workers_amount);
-  ~KThreadPool();
+  ThreadPool(std::size_t workers_amount);
+
+  ThreadPool(const ThreadPool&) = delete;
+  ThreadPool& operator=(const ThreadPool&) = delete;
+
+  ThreadPool(ThreadPool&&) noexcept = delete;
+  ThreadPool& operator=(ThreadPool&&) noexcept = delete;
+
+  ~ThreadPool();
 
   void Submit(Task task);
   std::size_t GetWorkersAmount() const;
@@ -24,7 +31,7 @@ class KThreadPool final {
  private:
   std::size_t workers_amount_;
   std::vector<std::thread> workers_;
-  MPMCUnboundedBlockingQueue<Task> queue_;
+  MPMCBlockingQueue<Task> queue_;
   WaitGroup tasks_;
 };
 

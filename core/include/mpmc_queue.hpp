@@ -8,8 +8,18 @@
 namespace ink {
 
 template <class T>
-class MPMCUnboundedBlockingQueue final {
+class MPMCBlockingQueue final {
  public:
+  MPMCBlockingQueue() = default;
+
+  MPMCBlockingQueue(const MPMCBlockingQueue&) = delete;
+  MPMCBlockingQueue& operator=(const MPMCBlockingQueue&) = delete;
+
+  MPMCBlockingQueue(MPMCBlockingQueue&&) noexcept = delete;
+  MPMCBlockingQueue& operator=(MPMCBlockingQueue&&) noexcept = delete;
+
+  ~MPMCBlockingQueue() = default;
+
   void Put(T task) {
     std::lock_guard guard(mutex_);
 

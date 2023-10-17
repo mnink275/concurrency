@@ -12,23 +12,29 @@ namespace ink::test {
 
 using namespace std::chrono_literals;
 
-struct MoveOnly {
+struct MoveOnly final {
+  MoveOnly(std::size_t state) : state(state) {};
+
   MoveOnly(const MoveOnly&) = delete;
   MoveOnly& operator=(const MoveOnly&) = delete;
 
-  MoveOnly(MoveOnly&&) = default;
-  MoveOnly& operator=(MoveOnly&&) = default;
+  MoveOnly(MoveOnly&&) noexcept = default;
+  MoveOnly& operator=(MoveOnly&&) noexcept = default;
+
+  std::size_t state;
 };
 
 TEST(MPMCQueue, MoveOnly) {
-  MoveOnly move_only{};
-  MPMCUnboundedBlockingQueue<MoveOnly> queue;
+  MoveOnly move_only{5};
+  MPMCBlockingQueue<MoveOnly> queue;
   queue.Put(std::move(move_only));
   auto result = queue.Fetch();
+  EXPECT_TRUE(result.has_value());
+  EXPECT_EQ(result.value().state, 5);
 }
 
 TEST(MPMCQueue, FIFO) {
-  MPMCUnboundedBlockingQueue<std::size_t> queue;
+  MPMCBlockingQueue<std::size_t> queue;
   for (std::size_t i = 0; i < 1'000'000; ++i) {
     queue.Put(i);
   }
@@ -38,7 +44,7 @@ TEST(MPMCQueue, FIFO) {
 }
 
 TEST(MPMCQueue, NoDeadlockClose) {
-  MPMCUnboundedBlockingQueue<std::size_t> queue;
+  MPMCBlockingQueue<std::size_t> queue;
 
   utils::Timer timer{};
 
@@ -52,7 +58,7 @@ TEST(MPMCQueue, NoDeadlockClose) {
 }
 
 TEST(MPMCQueue, AfterClose) {
-  MPMCUnboundedBlockingQueue<std::size_t> queue;
+  MPMCBlockingQueue<std::size_t> queue;
   queue.Put(5);
 
   std::thread consumer{[&queue]() {

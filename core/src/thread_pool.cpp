@@ -6,28 +6,28 @@
 
 namespace ink {
 
-KThreadPool::KThreadPool(std::size_t workers_amount)
+ThreadPool::ThreadPool(std::size_t workers_amount)
     : workers_amount_(workers_amount) {
   InitWorkers();
 }
 
-KThreadPool::~KThreadPool() {
+ThreadPool::~ThreadPool() {
   queue_.Close();
   for (auto&& worker : workers_) {
     worker.join();
   }
 }
 
-void KThreadPool::Submit(Task task) {
+void ThreadPool::Submit(Task task) {
   tasks_.Add(1);
   queue_.Put(std::move(task));
 }
 
-std::size_t KThreadPool::GetWorkersAmount() const { return workers_amount_; }
+std::size_t ThreadPool::GetWorkersAmount() const { return workers_amount_; }
 
-void KThreadPool::WaitIdle() { tasks_.Wait(); }
+void ThreadPool::WaitIdle() { tasks_.Wait(); }
 
-void KThreadPool::InitWorkers() {
+void ThreadPool::InitWorkers() {
   for (std::size_t i = 0; i < workers_amount_; ++i) {
     workers_.emplace_back([this]() {
       for (;;) {
